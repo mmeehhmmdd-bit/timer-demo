@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>30-Second Timer with Stop/Start & Restart Counter</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 36px;
+    text-align: center;
+    margin-top: 15vh;
+  }
+  #timer {
+    font-size: 72px;
+    margin-bottom: 20px;
+  }
+  #restartCount {
+    margin-top: 15px;
+    font-size: 28px;
+  }
+  button {
+    font-size: 24px;
+    margin: 10px 15px;
+    padding: 10px 25px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div id="timer">30</div>
+
+<button id="startBtn" disabled>Start</button>
+<button id="stopBtn">Stop</button>
+
+<div id="restartCount">Restarts: 0</div>
+
+<script>
+  let timeLeft = 30;
+  let restarts = 0;
+
+  const timerElement = document.getElementById('timer');
+  const restartCountElement = document.getElementById('restartCount');
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn = document.getElementById('stopBtn');
+
+  let intervalId = null;
+
+  function updateTimer() {
+    timerElement.textContent = timeLeft;
+    timeLeft--;
+
+    if (timeLeft < 0) {
+      timeLeft = 30;
+      restarts++;
+      restartCountElement.textContent = `Restarts: ${restarts}`;
+    }
+  }
+
+  function startTimer() {
+    if (intervalId) return;
+    intervalId = setInterval(updateTimer, 1000);
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+  }
+
+  function stopTimer() {
+    if (!intervalId) return;
+    clearInterval(intervalId);
+    intervalId = null;
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+  }
+
+  // Initialize
+  updateTimer();
+  startTimer();
+
+  startBtn.addEventListener('click', startTimer);
+  stopBtn.addEventListener('click', stopTimer);
+</script>
+
+</body>
+</html>
